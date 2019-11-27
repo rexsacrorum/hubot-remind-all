@@ -1,0 +1,32 @@
+{
+  "name": "hubot-remind-all",
+  "version": "0.0.1",
+  "description": "Hubot channel reminder script",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rexsacrorum/hubot-remind-all.git"
+  },
+  "keywords": [
+    "hubot",
+    "hubot-scripts",
+    "reminder"
+  ],
+  "author": "sacrorum <github@sacrorum.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rexsacrorum/hubot-remind-all/issues"
+  },
+  "homepage": "https://github.com/rexsacrorum/hubot-remind-all#readme",
+  "dependencies": {
+    "node-schedule": "^1.3.2",
+    "cron-parser": "^2.13.0",
+    "moment": "^2.24.0"
+  },
+  "peerDependencies": {
+    "hubot": ">=2 <10 || 0.0.0-development"
+  }
+}
