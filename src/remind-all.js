@@ -114,10 +114,10 @@ function remindBot(robot) {
   })
 
   // Load jobs from brain.
-  robot.brain.on("connected", () => {  
+  robot.brain.on("connected", () => {
     const jobs = robot.brain.get('hubot-remind-reminders') || [];
     jobs.forEach(function (job) {
-        return registerNewJob(robot, job.id, job.pattern, job.room, job.message);
+      return registerNewJob(robot, job.id, job.pattern, job.room, job.message);
     })
 
     robot.logger.info(`${jobs.length} jobs loaded from brain.`)
