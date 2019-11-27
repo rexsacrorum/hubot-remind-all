@@ -113,7 +113,7 @@ function remindBot(robot) {
 
   // Load jobs from brain.
   function loadJobsFromBrain() {  
-    thingsToRemind = robot.brain.get('hubot-remind-reminders') || [];
+    const thingsToRemind = robot.brain.get('hubot-remind-reminders') || [];
     thingsToRemind.forEach(function (job) {
         return registerNewJob(robot, job.id, job.pattern, job.user, job.message);
     });
