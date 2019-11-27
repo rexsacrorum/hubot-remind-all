@@ -1,3 +1,5 @@
+"use strict"
+
 // Description:
 //  Simply channel reminder script
 //
