@@ -1,12 +1,12 @@
-"use strict"
+'use strict'
 
 // Description:
-//  Simply channel reminder script
+//   Simply channel reminder script
 //
 // Commands:
-//  hubot reminders - displays all reminders.
-//  hubot rm|forget|remove reminder 1 - removes reminder with id 1
-//  hubot remind #general at '0 10 * * 1-5' to Hello world! - prints 'Hello world!' at 10am on weekdays in #general
+//   hubot remind #general at '0 10 * * 1-5' to Hello world! - prints 'Hello world!' at 10am on weekdays in #general
+//   hubot rm|forget|remove reminder 1 - removes reminder with id 1
+//   hubot reminders - displays all reminders.
 
 const schedule = require('node-schedule');
 const parser = require('cron-parser');
@@ -66,7 +66,9 @@ function handleNewJob(robot, res, room, pattern, text) {
 // Saves jobs in hubot brain.
 function saveJobs(robot) {
   robot.brain.set('hubot-remind-reminders', BRAIN_JOBS);
-  return robot.brain.save();
+  robot.brain.save();
+
+  robot.logger.info(`${BRAIN_JOBS.length} jobs were saved`)
 }
 
 function remindBot(robot) {
@@ -112,13 +114,14 @@ function remindBot(robot) {
   })
 
   // Load jobs from brain.
-  function loadJobsFromBrain() {  
-    const thingsToRemind = robot.brain.get('hubot-remind-reminders') || [];
-    thingsToRemind.forEach(function (job) {
-        return registerNewJob(robot, job.id, job.pattern, job.user, job.message);
-    });
-  }
-  loadJobsFromBrain()
+  robot.brain.on("connected", () => {  
+    const jobs = robot.brain.get('hubot-remind-reminders') || [];
+    jobs.forEach(function (job) {
+        return registerNewJob(robot, job.id, job.pattern, job.room, job.message);
+    })
+
+    robot.logger.info(`${jobs.length} jobs loaded from brain.`)
+  })
 }
 
 class ScheduleJob {
@@ -140,8 +143,6 @@ class ScheduleJob {
 
   stop() {
     this.scheduledJob.cancel(false)
-    console.log('job was canceled')
-    console.log(schedule.scheduledJobs)
   }
 
   // Sends message to a room.
@@ -152,6 +153,10 @@ class ScheduleJob {
     }
 
     robot.send(envelope, this.message)
+  }
+
+  serialize() {
+    return [this.pattern, this.room, this.message];
   }
 
   // node-schedule job
