@@ -18,8 +18,12 @@ var JOBS = {}
 // Jobs from hubot brain.
 var BRAIN_JOBS = []
 
+function getId() {
+  return uuidv4().slice(0, 8)
+}
+
 function createNewJob(robot, pattern, room, text) {
-  const id = uuidv4().slice(0, 8)
+  const id = getId()
 
   return registerNewJob(robot, id, pattern, room, text)
 }
@@ -117,7 +121,7 @@ function remindBot(robot) {
   robot.brain.on("connected", () => {
     const jobs = robot.brain.get('hubot-remind-reminders') || [];
     jobs.forEach(function (job) {
-      return registerNewJob(robot, job.id, job.pattern, job.room, job.message);
+      return registerNewJob(robot, getId(), job.pattern, job.room, job.message);
     })
 
     robot.logger.info(`${jobs.length} jobs loaded from brain.`)

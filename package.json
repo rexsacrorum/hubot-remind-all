@@ -1,6 +1,6 @@
 {
   "name": "hubot-remind-all",
-  "version": "0.0.18",
+  "version": "0.0.22",
   "description": "Hubot channel reminder script",
   "main": "index.js",
   "scripts": {
