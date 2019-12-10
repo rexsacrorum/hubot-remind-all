@@ -11,6 +11,7 @@
 const schedule = require('node-schedule');
 const parser = require('cron-parser');
 const moment = require('moment')
+const uuidv4 = require('uuid/v4');
 
 // Local jobs
 var JOBS = {}
@@ -18,8 +19,7 @@ var JOBS = {}
 var BRAIN_JOBS = []
 
 function createNewJob(robot, pattern, room, text) {
-  var keys = Object.keys(JOBS).map(k => +k)
-  const id = Math.max(keys) + 1
+  const id = uuidv4().slice(0, 8)
 
   return registerNewJob(robot, id, pattern, room, text)
 }
@@ -95,7 +95,7 @@ function remindBot(robot) {
   })
 
   // Remove reminder by id.
-  robot.respond(/(rm|forget|remove) reminder (\d+)/i, (res) => {
+  robot.respond(/(rm|forget|remove) reminder (\S+)/i, (res) => {
     const jobId = res.match[2]
     if (!JOBS[jobId])
       return res.send(`Reminder with id '${jobId}' was not found`)
@@ -136,7 +136,7 @@ class ScheduleJob {
   // Plans a new job.
   start(robot) {
     var _this = this
-    schedule.scheduleJob(this.id.toString(), this.pattern, () => {
+    schedule.scheduleJob(this.id, this.pattern, () => {
       _this.sendMessage(robot)
     })
   }
